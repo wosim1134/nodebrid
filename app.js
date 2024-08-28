@@ -11,19 +11,24 @@ const passport = require('passport'); // 인증을 위한 미들웨어
 dotenv.config();
 const pageRouter = require('./routes/page'); // 페이지 라우터를 불러오기
 const authRouter = require('./routes/auth'); // 페이지 라우터를 불러오기
+const postRouter = require('./routes/post'); // 페이지 라우터를 불러오기
+const userRouter = require('./routes/user'); // 페이지 라우터를 불러오기
 const { sequelize } = require('./models'); //
 const passportConfig = require('./passport'); // passport
 
 // express 애플리케이션 생성
 const app = express();
 passportConfig();
+
 app.set('port', process.env.PORT || 8001); // 포트 설정을 환경 변수에서 가져오거나 기본값으로 8001 사용
 app.set('view engine', 'html'); // 뷰 엔진을 'html'로 설정
+
 // nunjucks 설정하여 'views' 디렉토리 템플릿 파일이 위치한 곳으로 지정
 nunjucks.configure('views', {
     express: app, // express 애플리케이션에 연결
     watch: true, // 템플릿 파일이 변경될 때 자동으로 다시 로드되도록 설정
 });
+
 //
 sequelize.sync({ force: false }) //
     .then(() => { //

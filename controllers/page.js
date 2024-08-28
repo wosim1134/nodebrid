@@ -1,5 +1,5 @@
-const Post = require("../models/post");
-
+//
+const { User, Post, Hashtag } = require("../models");
 
 // 프로필 페이지를 렌더링하는 함수 정의
 exports.renderProfile = (req, res) => {
@@ -38,3 +38,29 @@ exports.renderMain = async (req, res, next) => {
         next(err); //
     }
 }
+
+//
+exports.renderHashtag = async (req, res, next) => {
+    const query = req.query.hashtag; //
+    if (!query) {
+        return res.redirect('/'); //
+    }
+    try {
+        //
+        const hashtag = await Hashtag.findOne({ where: { title: query } });
+        let post = []; //
+        if (hashtag) {
+            //
+            post = await hashtag.getPosts({ include: [{ model: User }] });
+        }
+
+        //
+        return res.render('main', {
+            title: `${query} | NodeBrid`, // 페이지 타이틀을 설정합니다.
+            twits: posts, // 트윗 목록을 설정합니다.
+        });
+    } catch (error) {
+        console.error(error); //
+        return next(error); //
+    }
+};

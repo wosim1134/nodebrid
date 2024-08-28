@@ -6,6 +6,7 @@ const User = require('../models/user'); //
 module.exports = () => {
     //
     passport.serializeUser((user, done) => {
+        //
         done(null, user.id); //
         //
         //
@@ -14,9 +15,23 @@ module.exports = () => {
     //
     passport.deserializeUser((id, done) => {
         //
-        User.findOne({ where: { id } }) //
-            .then(user => done(null, user))//
-            .catch(err => done(err)); //
+        //
+        //
+        //
+        User.findOne({
+            where: { id }, //
+            include: [{ //
+                model: User, //
+                attributes: ['id', 'nick'], //
+                as: 'Followers', //
+            }, {
+                model: User, //
+                attributes: ['id', 'nick'], //
+                as: 'Followers', //
+            }],
+        }) //
+        .then(user => done(null, user))//
+        .catch(err => done(err)); //
     });
 
     local(); //
